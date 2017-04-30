@@ -9,14 +9,20 @@ public class WikiPage {
     private String words;
     private String[] children;
     private int amountChildren;
+    private WikiPage parent;
+    private boolean seen;
+    private boolean childrenCreated;
 
 
-    public WikiPage(String u, String t, String w){
+    public WikiPage(String u, String t, String w, WikiPage p){
         this.URL = u;
         this.title = t;
         this.words = w;
         this.children = new String[4];
         this.amountChildren = 0;
+        this.parent = p;
+        this.seen = false;
+        this.childrenCreated = false;
     }
 
     public String getURL() {
@@ -40,8 +46,23 @@ public class WikiPage {
         return children;
     }
 
+    public WikiPage getParent(){
+        return parent;
+    }
 
+    public boolean isSeen() {
+        return seen;
+    }
 
+    public void setSeen(boolean seen) {
+        this.seen = seen;
+    }
 
+    public boolean isChildrenCreated() {
+        return childrenCreated;
+    }
 
+    public void setChildrenCreated(boolean childrenCreated) {
+        this.childrenCreated = childrenCreated;
+    }
 }
