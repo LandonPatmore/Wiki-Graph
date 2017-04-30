@@ -7,14 +7,16 @@ public class WikiPage {
     private String URL;
     private String title;
     private String words;
-    private WikiPage[] children;
+    private String[] children;
+    private int amountChildren;
 
 
-    public WikiPage(String u, String t, String w, WikiPage[] c){
+    public WikiPage(String u, String t, String w){
         this.URL = u;
         this.title = t;
         this.words = w;
-        this.children = c;
+        this.children = new String[4];
+        this.amountChildren = 0;
     }
 
     public String getURL() {
@@ -29,7 +31,17 @@ public class WikiPage {
         return words;
     }
 
-    public WikiPage[] getChildren() {
+    public void setChildren(String u){
+        children[amountChildren] = u;
+        amountChildren++;
+    }
+
+    public String[] getChildren() {
         return children;
     }
+
+
+
+
+
 }
