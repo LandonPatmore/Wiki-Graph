@@ -3,7 +3,7 @@ package CSC365HW3;
 /**
  * Created by landon on 4/29/17.
  */
-public class WikiPage {
+public class WikiPage{
     private String URL;
     private String title;
     private String[] children;
@@ -35,7 +35,7 @@ public class WikiPage {
 
     public void setWordsVector(String[] w){
         for(int i = 0; i < w.length; i++){
-            if(!w[i].equals("")) {
+            if(!(w[i].length() <=1)) {
                 vector.put(new KeyVal(w[i], 1, 0));
             }
         }

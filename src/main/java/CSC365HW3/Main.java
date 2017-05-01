@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main extends Application {
 
@@ -14,34 +15,19 @@ public class Main extends Application {
 //        primaryStage.setScene(new Scene(root, 300, 275));
 //        primaryStage.show();
 
-        ArrayList<WikiPage> w = new ArrayList<WikiPage>();
-        DataPuller d = new DataPuller();
-        w.add(d.pullData("https://en.wikipedia.org/wiki/Formula_One", null, false));
-        w.add(d.pullData("https://en.wikipedia.org/wiki/NASCAR", null, false));
+        MostCommonWords.INSTANCE.commonWords();
 
-        HashTable h = w.get(0).getVector();
-
-//        h.mergeHashTables(w.get(1).getVector());
-
-        for(KeyVal k : h.exposeHT()) {
-            if (!(k == null)){
-                System.out.println(k.getKey() + "    " + k.getCount1() + "   " + k.getCount2());
-            }
-        }
-
-//        h.displayHash();
-//        System.out.println("lol");
-
-
-
-
-
-
-
-
+//        ArrayList<WikiPage> w = new ArrayList<WikiPage>();
+//        DataPuller d = new DataPuller();
+//        w.add(d.pullData("https://en.wikipedia.org/wiki/Formula_One", null, false));
+//
+////        CompareWikiPages c = new CompareWikiPages(w.get(0), w.get(1));
+////        System.out.println("Cosine Similarity: " + c.compare());
+//
+//
 //        for (int i = 0; i < 1; i++) {
 //            try {
-//                System.out.print(i + " ");
+//                System.out.println(w.get(i).getTitle());
 //                for (int j = 0; j < w.get(i).getChildren().length; j++) {
 //                    w.add(d.pullData(w.get(i).getChildren()[j], w.get(i), false));
 //                }
@@ -50,12 +36,11 @@ public class Main extends Application {
 //                e.printStackTrace();
 //            }
 //        }
-//        System.out.println();
 //        //creates Wikipages for the children that were not created, but were just URLS
 //        try {
 //            for(int i = 0; i < w.size(); i++){
-//                System.out.print(i + " ");
 //                if(!w.get(i).isChildrenCreated()){
+//                    System.out.println(w.get(i).getTitle());
 //                    for(int j = 0; j < 4; j++) {
 //                        if(!w.get(i).noChildren()) {
 //                            w.add(d.pullData(w.get(i).getChildren()[j], w.get(i), true));
@@ -63,11 +48,10 @@ public class Main extends Application {
 //                    }
 //                }
 //            }
+//            System.out.println("lol");
 //        } catch (Exception e){
 //            e.printStackTrace();
 //        }
-//        System.out.println();
-//        show(w);
     }
 
     public void show(ArrayList<WikiPage> w){

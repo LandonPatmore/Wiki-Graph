@@ -88,6 +88,24 @@ public class HashTable {
         }
     }
 
+    public ArrayList<KeyVal> toArrayList(){
+        ArrayList<KeyVal> k = new ArrayList<KeyVal>();
+
+        for(int i = 0; i < HT.length; i++){
+            if(HT[i] != null){
+                KeyVal kv = HT[i];
+                k.add(kv);
+                while(kv.getNext() != null){
+                    kv = kv.getNext();
+                    k.add(kv);
+                }
+            }
+        }
+
+
+        return k;
+    }
+
 
 
     /**

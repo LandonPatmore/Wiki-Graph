@@ -44,8 +44,8 @@ public class DataPuller {
 
         for (Element e : links) {
             String a = e.attr("href");
-            if (a.contains("/wiki")) {
-                if (a.substring(0, 5).matches("/wiki")) {
+            if (a.length() >= 5) {
+                if (a.substring(0, 5).equals("/wiki")) {
                     if (!a.contains("Wikipedia") && !a.contains("File") && !a.contains("Help") && !a.contains("Portal") && !a.contains("Special") && !a.contains("Talk") && !a.contains("Category") && !a.contains("Template") && !a.contains("disambiguation")) {
                         w = new WikiPage(url, t, parent);
                         if(!dangler) {
