@@ -19,34 +19,35 @@ public class DataPuller {
     private String BASE_URL = "https://en.wikipedia.org";
     private Random R_G;
     private WikiPage w;
+    private ArrayList<String> pageLinks;
 
     public DataPuller() {
         R_G = new Random();
+        pageLinks = new ArrayList<String>();
     }
 
     public WikiPage pullData(String url, WikiPage parent, boolean dangler) throws IOException {
         Document doc = Jsoup.connect(url).get();
         Elements links = doc.select("a");
-        ArrayList<String> pageLinks = new ArrayList<String>();
-
-        Element title = doc.select("title").first();
-        String t = title.text().replace(" - Wikipedia", "");
 
         Elements paragraphs = doc.select("p");
         StringBuilder words = new StringBuilder();
 
+        Element title = doc.select("title").first();
+        String t = title.text().replace(" - Wikipedia", "");
+
         for(Element e: paragraphs){
-            words.append(" ").append(e.text());
+            words.append(e.text());
         }
 
-        System.out.println(words);
+        String[] splitWords = words.toString().replaceAll("[_$&+,:;=?@#|'<>.^*()%!\\[\\]\\-\"/{}]", " ").split(" ");
 
         for (Element e : links) {
             String a = e.attr("href");
             if (a.contains("/wiki")) {
                 if (a.substring(0, 5).matches("/wiki")) {
                     if (!a.contains("Wikipedia") && !a.contains("File") && !a.contains("Help") && !a.contains("Portal") && !a.contains("Special") && !a.contains("Talk") && !a.contains("Category") && !a.contains("Template") && !a.contains("disambiguation")) {
-                        w = new WikiPage(url, t, words.toString(), parent);
+                        w = new WikiPage(url, t, parent);
                         if(!dangler) {
                             pageLinks.add(a);
                         }
@@ -62,6 +63,8 @@ public class DataPuller {
                 w.setChildren(decode);
             }
         }
+
+        w.setWordsVector(splitWords);
 
         return w;
 

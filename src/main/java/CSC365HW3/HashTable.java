@@ -12,7 +12,7 @@ import java.util.Collections;
  */
 public class HashTable {
     private KeyVal[] HT;
-    private int tableSize = 20000;
+    private int tableSize = 10000;
     private int count = 0;
 
     /**
@@ -31,6 +31,7 @@ public class HashTable {
     public void put(KeyVal keyVal) {
         Hashing h = new Hashing(keyVal.getKey(), keyVal.getKey().length());
         int hash = h.hasher() % nextPrime(tableSize);
+
         if (indexEmpty(hash)) {
             HT[hash] = keyVal;
             count++;
@@ -40,6 +41,10 @@ public class HashTable {
             count++;
         }
 
+        if(get(keyVal)){
+            HT[hash].add();
+        }
+
         if((float)(count / tableSize) > 0.66){
             resize();
         }
@@ -47,42 +52,25 @@ public class HashTable {
 
     /**
      *
-     * @return a list of key names inside the hashtable
+     * @param k takes a KeyVal and checks to see if the key is within the HashTable
+     * @return either a null if it can't be found or the name of the Key
      */
 
-    public ArrayList<String> getKeys(){
-        ArrayList<String> keys = new ArrayList<String>();
-        for(KeyVal k : HT){
-            if(k != null) {
-                keys.add(k.getKey());
-            }
-        }
-
-        Collections.sort(keys);
-
-        return keys;
-    }
-
-    /**
-     *
-     * @param key takes a String and checks to see if the key is within the HashTable
-     * @return either a null if it can't be found or the Double[] of Values of the Key
-     */
-
-    public Double[] get(String key) {
-        Hashing h = new Hashing(key, key.length());
+    public boolean get(KeyVal k) {
+        Hashing h = new Hashing(k.getKey(), k.getKey().length());
         int hash = h.hasher() % nextPrime(tableSize);
 
         if (indexEmpty(hash)) {
-            return null;
+            return false;
         }
 
         KeyVal head = HT[hash];
 
-        while (!indexEmpty(hash) && !head.getKey().equals(key)) {
+        while (!indexEmpty(hash) && !head.getKey().equals(k.getKey())) {
             head = head.getNext();
         }
-        return head.getVal();
+
+        return true;
     }
 
     /**
@@ -91,71 +79,17 @@ public class HashTable {
 
     public void displayHash(){
         for(int i = 0; i < HT.length; i++){
-            System.out.print(i + " ");
             if(HT[i] != null){
+                System.out.print(i + " ");
                 KeyVal kv = HT[i];
                 System.out.print(kv.getKey() + " ");
                 while(kv.getNext() != null){
                     kv = kv.getNext();
                     System.out.print(kv.getKey() + " ");
                 }
-            }
-            System.out.println();
-        }
-    }
-
-    /**
-     * Looks to find stocks with a similarity of 500,000,000 or less
-     * @param key takes a String and checks its values against all of the other keys' values to find the most
-     *            similar stock to the one requested
-     * @return ArrayList of KeyVals to then be used in the GUI to display the most similar keys to the requested one
-     */
-
-    public ArrayList<KeyVal> similarity(String key){
-        ArrayList<KeyVal> similarities = new ArrayList<KeyVal>();
-        Double check = 20000.0;
-        for(int i = 0; i < HT.length; i++){
-            if(!indexEmpty(i)){
-                KeyVal kv = HT[i];
-                while(kv != null && !kv.getKey().equals(key)) {
-                    Double distance = ManhattanDistance(get(key), kv.getVal());
-                    if(distance < check){
-                        //check = distance; //had to be commented out because the check wouldn't check all if a value
-                        // before hand was smaller then a future one even if it was smaller then the original check
-                        kv.setmD(distance);
-                        similarities.add(kv);
-                    }
-                    kv = kv.getNext();
-                }
+                System.out.println();
             }
         }
-
-        Collections.sort(similarities);
-        //used to show distances, not needed
-        for(KeyVal k : similarities){
-            System.out.println(k + "     " + k.getmD());
-        }
-        System.out.println();
-
-        return similarities;
-    }
-
-    /**
-     *
-     * @param x requested key's values
-     * @param y current index's values
-     * @return Absolute value of sum(x) - sum(y)
-     */
-
-    private Double ManhattanDistance(Double[] x, Double[] y){
-        Double sumx, sumy;
-        sumx = sumy = 0.0;
-
-        for(int i = 0; i < x.length; i++){
-            sumx += x[i];
-            sumy += y[i];
-        }
-        return Math.abs(sumx - sumy);
     }
 
     /**

@@ -6,23 +6,23 @@ package CSC365HW3;
 public class WikiPage {
     private String URL;
     private String title;
-    private String words;
     private String[] children;
     private int amountChildren;
     private WikiPage parent;
     private boolean seen;
     private boolean childrenCreated;
+    private HashTable vector;
 
 
-    public WikiPage(String u, String t, String w, WikiPage p){
+    public WikiPage(String u, String t, WikiPage p){
         this.URL = u;
         this.title = t;
-        this.words = w;
         this.children = new String[4];
         this.amountChildren = 0;
         this.parent = p;
         this.seen = false;
         this.childrenCreated = false;
+        this.vector = new HashTable();
     }
 
     public String getURL() {
@@ -33,8 +33,16 @@ public class WikiPage {
         return title;
     }
 
-    public String getWords() {
-        return words;
+    public void setWordsVector(String[] w){
+        for(int i = 0; i < w.length; i++){
+            if(!w[i].equals("")) {
+                vector.put(new KeyVal(w[i], 1));
+            }
+        }
+    }
+
+    public HashTable getVector(){
+        return vector;
     }
 
     public void setChildren(String u){
@@ -44,6 +52,10 @@ public class WikiPage {
 
     public String[] getChildren() {
         return children;
+    }
+
+    public boolean noChildren(){
+        return amountChildren == 0;
     }
 
     public WikiPage getParent(){

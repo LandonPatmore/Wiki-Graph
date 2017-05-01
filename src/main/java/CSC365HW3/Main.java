@@ -21,33 +21,36 @@ public class Main extends Application {
         DataPuller d = new DataPuller();
         w.add(d.pullData("https://en.wikipedia.org/wiki/Formula_One", null, false));
 
-//        for (int i = 0; i < 10; i++) {
-//            try {
-//                System.out.print(i + " ");
-//                for (int j = 0; j < w.get(i).getChildren().length; j++) {
-//                    w.add(d.pullData(w.get(i).getChildren()[j], w.get(i), false));
-//                }
-//                w.get(i).setChildrenCreated(true);
-//            } catch (Exception e){
-//                System.out.println("ERROR WITH URL <--------");
-//            }
-//        }
-//        System.out.println();
-//        //creates Wikipages for the children that were not created, but were just URLS
-//        try {
-//            for(int i = 0; i < w.size(); i++){
-//                System.out.print(i + " ");
-//                if(!w.get(i).isChildrenCreated()){
-//                    for(int j = 0; j < w.get(i).getChildren().length; j++) {
-//                        w.add(d.pullData(w.get(i).getChildren()[j], w.get(i), true));
-//                    }
-//                }
-//            }
-//        } catch (Exception e){
-//            System.out.println("ERROR WITH URL <--------");
-//        }
-//        System.out.println();
-//        show(w);
+        for (int i = 0; i < 1; i++) {
+            try {
+                System.out.print(i + " ");
+                for (int j = 0; j < w.get(i).getChildren().length; j++) {
+                    w.add(d.pullData(w.get(i).getChildren()[j], w.get(i), false));
+                }
+                w.get(i).setChildrenCreated(true);
+            } catch (Exception e){
+                System.out.println("ERROR WITH URL <--------");
+            }
+        }
+        System.out.println();
+        //creates Wikipages for the children that were not created, but were just URLS
+        try {
+            for(int i = 0; i < w.size(); i++){
+                System.out.print(i + " ");
+                if(!w.get(i).isChildrenCreated()){
+                    for(int j = 0; j < 4; j++) {
+                        if(!w.get(i).noChildren()) {
+                            w.add(d.pullData(w.get(i).getChildren()[j], w.get(i), true));
+                        }
+                    }
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println();
+        show(w);
+        System.out.println("lol");
     }
 
     public void show(ArrayList<WikiPage> w){
@@ -58,7 +61,6 @@ public class Main extends Application {
                 System.out.printf("%1$-45s %2$-45s %3$-45s\n", w.get(i).getParent().getTitle(), w.get(i).getTitle(), i);
             }
         }
-        System.out.println("check");
     }
 
 
