@@ -37,7 +37,7 @@ public class DataPuller {
         String t = title.text().replace(" - Wikipedia", "");
 
         for(Element e: paragraphs){
-            words.append(e.text());
+            words.append(e.text().toLowerCase());
         }
 
         String[] splitWords = words.toString().replaceAll("[_$&+,:;=?@#|'<>.^*()%!\\[\\]\\-\"/{}]", " ").split(" ");

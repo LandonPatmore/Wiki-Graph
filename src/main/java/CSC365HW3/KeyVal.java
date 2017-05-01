@@ -5,18 +5,15 @@ package CSC365HW3;
  */
 public class KeyVal {
     private String key;
-    private int count;
+    private int count1;
+    private int count2;
 
     private KeyVal next;
 
-    /**
-     *
-     * @param k key string
-     * @param c count value
-     */
-    public KeyVal(String k, int c) {
-        key = k;
-        count = c;
+    public KeyVal(String k, int c1, int c2) {
+        this.key = k;
+        this.count1 = c1;
+        this.count2 = c2;
     }
 
     /**
@@ -50,8 +47,9 @@ public class KeyVal {
      * Adds to the count of the word
      */
 
-    public void add(){
-        this.count++;
+    public void add(int c1, int c2){
+        this.count1 += c1;
+        this.count2 += c2;
     }
 
     /**
@@ -59,8 +57,20 @@ public class KeyVal {
      * @return the amount of the count
      */
 
-    public int getCount(){
-        return count;
+    public int getCount1(){
+        return count1;
+    }
+
+    public int getCount2(){
+        return count2;
+    }
+
+    public void setCount1(int c){
+        this.count1 = c;
+    }
+
+    public void setCount2(int c){
+        this.count2 = c;
     }
 
 

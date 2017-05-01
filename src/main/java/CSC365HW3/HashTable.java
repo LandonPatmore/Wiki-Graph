@@ -35,14 +35,11 @@ public class HashTable {
         if (indexEmpty(hash)) {
             HT[hash] = keyVal;
             count++;
-        }
-        if (!indexEmpty(hash) && !HT[hash].getKey().equals(keyVal.getKey())) {
+        } else if (!indexEmpty(hash) && !HT[hash].getKey().equals(keyVal.getKey())) {
             HT[hash].setNext(keyVal);
             count++;
-        }
-
-        if(get(keyVal)){
-            HT[hash].add();
+        } else if(get(keyVal)){
+            HT[hash].add(keyVal.getCount1(), keyVal.getCount2());
         }
 
         if((float)(count / tableSize) > 0.66){
@@ -53,7 +50,7 @@ public class HashTable {
     /**
      *
      * @param k takes a KeyVal and checks to see if the key is within the HashTable
-     * @return either a null if it can't be found or the name of the Key
+     * @return either true or false
      */
 
     public boolean get(KeyVal k) {
@@ -72,6 +69,26 @@ public class HashTable {
 
         return true;
     }
+
+    public KeyVal[] exposeHT(){
+        return HT;
+    }
+
+    private int size(){
+        return HT.length;
+    }
+
+    public void mergeHashTables(HashTable h){
+        for(int i = 0; i < h.size(); i++){
+            if(h.exposeHT()[i] != null){
+                h.exposeHT()[i].setCount2(h.exposeHT()[i].getCount1());
+                h.exposeHT()[i].setCount1(0);
+                this.put(h.exposeHT()[i]);
+            }
+        }
+    }
+
+
 
     /**
      * Testing method to see how the HashTable was placing KeyVals

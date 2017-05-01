@@ -36,7 +36,7 @@ public class WikiPage {
     public void setWordsVector(String[] w){
         for(int i = 0; i < w.length; i++){
             if(!w[i].equals("")) {
-                vector.put(new KeyVal(w[i], 1));
+                vector.put(new KeyVal(w[i], 1, 0));
             }
         }
     }
