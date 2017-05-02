@@ -57,11 +57,11 @@ public class KeyVal {
      * @return the amount of the count
      */
 
-    public int getCount1(){
+    public int p1Count(){
         return count1;
     }
 
-    public int getCount2(){
+    public int p2Count(){
         return count2;
     }
 
