@@ -14,19 +14,18 @@ import java.util.Random;
 /**
  * Created by landon on 4/29/17.
  */
-public class DataPuller {
+class DataPuller {
 
-    private String BASE_URL = "https://en.wikipedia.org";
     private Random R_G;
     private WikiPage w;
     private ArrayList<String> pageLinks;
 
-    public DataPuller() {
+    DataPuller() {
         R_G = new Random();
         pageLinks = new ArrayList<String>();
     }
 
-    public WikiPage pullData(String url, WikiPage parent, boolean dangler) throws IOException {
+    WikiPage pullData(String url, WikiPage parent, boolean dangler) throws IOException {
         Document doc = Jsoup.connect(url).get();
         Elements links = doc.select("a");
 
@@ -59,6 +58,7 @@ public class DataPuller {
         if(!dangler) {
             for (int i = 0; i < 4; i++) {
                 int rnd = R_G.nextInt(pageLinks.size());
+                String BASE_URL = "https://en.wikipedia.org";
                 String decode = URLDecoder.decode(BASE_URL + pageLinks.get(rnd), "UTF-8");
                 w.setChildren(decode);
             }

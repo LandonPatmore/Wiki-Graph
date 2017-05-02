@@ -5,13 +5,12 @@ package CSC365HW3;
  */
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Custom HashTable Implementation
  */
-public class HashTable {
-    private KeyVal[] HT;
+class HashTable {
+    private WordFrequency[] HT;
     private int tableSize = 10000;
     private int count = 0;
 
@@ -19,27 +18,27 @@ public class HashTable {
      * creates a new Array of CLinkedLists
      */
 
-    public HashTable() {
-        HT = new KeyVal[nextPrime(tableSize)];
+    HashTable() {
+        HT = new WordFrequency[nextPrime(tableSize)];
     }
 
     /**
-     * Puts a KeyVal into the HashTable and will automatically turn collisions into a CLinkedList
-     * @param keyVal takes a KeyVal to put into the HashTable
+     * Puts a WordFrequency into the HashTable and will automatically turn collisions into a CLinkedList
+     * @param wordFrequency takes a WordFrequency to put into the HashTable
      */
 
-    public void put(KeyVal keyVal) {
-        Hashing h = new Hashing(keyVal.getKey(), keyVal.getKey().length());
+    void put(WordFrequency wordFrequency) {
+        Hashing h = new Hashing(wordFrequency.getKey(), wordFrequency.getKey().length());
         int hash = h.hasher() % nextPrime(tableSize);
 
         if (indexEmpty(hash)) {
-            HT[hash] = keyVal;
+            HT[hash] = wordFrequency;
             count++;
-        } else if (!indexEmpty(hash) && !HT[hash].getKey().equals(keyVal.getKey())) {
-            HT[hash].setNext(keyVal);
+        } else if (!indexEmpty(hash) && !HT[hash].getKey().equals(wordFrequency.getKey())) {
+            HT[hash].setNext(wordFrequency);
             count++;
-        } else if(get(keyVal)){
-            HT[hash].add(keyVal.getCount1(), keyVal.getCount2());
+        } else if(get(wordFrequency)){
+            HT[hash].add(wordFrequency.p1Count(), wordFrequency.p2Count());
         }
 
         if((float)(count / tableSize) > 0.66){
@@ -49,11 +48,11 @@ public class HashTable {
 
     /**
      *
-     * @param k takes a KeyVal and checks to see if the key is within the HashTable
+     * @param k takes a WordFrequency and checks to see if the key is within the HashTable
      * @return either true or false
      */
 
-    public boolean get(KeyVal k) {
+    boolean get(WordFrequency k) {
         Hashing h = new Hashing(k.getKey(), k.getKey().length());
         int hash = h.hasher() % nextPrime(tableSize);
 
@@ -61,7 +60,7 @@ public class HashTable {
             return false;
         }
 
-        KeyVal head = HT[hash];
+        WordFrequency head = HT[hash];
 
         while (!indexEmpty(hash) && !head.getKey().equals(k.getKey())) {
             head = head.getNext();
@@ -70,38 +69,34 @@ public class HashTable {
         return true;
     }
 
-    public KeyVal[] exposeHT(){
+    private WordFrequency[] exposeHT(){
         return HT;
     }
 
-    private int size(){
-        return HT.length;
+    int length(){
+        return count;
     }
 
-    public void mergeHashTables(HashTable h){
-        for(int i = 0; i < h.size(); i++){
-            if(h.exposeHT()[i] != null){
-                h.exposeHT()[i].setCount2(h.exposeHT()[i].getCount1());
-                h.exposeHT()[i].setCount1(0);
-                this.put(h.exposeHT()[i]);
+    void mergeHashTables(HashTable h){
+        for(WordFrequency w : h.exposeHT()){
+            while(w != null){
+                w.setCount2(w.p1Count());
+                w.zeroCount1();
+                this.put(w);
+                w = w.getNext();
             }
         }
     }
 
-    public ArrayList<KeyVal> toArrayList(){
-        ArrayList<KeyVal> k = new ArrayList<KeyVal>();
+    ArrayList<WordFrequency> toArrayList(){
+        ArrayList<WordFrequency> k = new ArrayList<WordFrequency>();
 
-        for(int i = 0; i < HT.length; i++){
-            if(HT[i] != null){
-                KeyVal kv = HT[i];
-                k.add(kv);
-                while(kv.getNext() != null){
-                    kv = kv.getNext();
-                    k.add(kv);
-                }
+        for(WordFrequency w : HT){
+            while(w != null){
+                k.add(w);
+                w = w.getNext();
             }
         }
-
 
         return k;
     }
@@ -112,16 +107,11 @@ public class HashTable {
      * Testing method to see how the HashTable was placing KeyVals
      */
 
-    public void displayHash(){
-        for(int i = 0; i < HT.length; i++){
-            if(HT[i] != null){
-                System.out.print(i + " ");
-                KeyVal kv = HT[i];
-                System.out.print(kv.getKey() + " ");
-                while(kv.getNext() != null){
-                    kv = kv.getNext();
-                    System.out.print(kv.getKey() + " ");
-                }
+    void displayHash(){
+        for(WordFrequency w : HT){
+            while (w != null){
+                System.out.printf("%1$-45s %2$-45s %3$-45s",w.getKey(), w.p1Count(), w.p2Count());
+                w = w.getNext();
                 System.out.println();
             }
         }
@@ -177,20 +167,15 @@ public class HashTable {
     private void resize(){
         tableSize = 2 * tableSize;
         tableSize = nextPrime(tableSize);
-        KeyVal[] old = HT;
+        WordFrequency[] old = HT;
 
-        HT = new KeyVal[tableSize];
+        HT = new WordFrequency[tableSize];
         count = 0;
 
-        for(int i = 0; i < old.length; i++){
-            if(old[i] != null){
-                KeyVal kv = old[i];
-                put(kv);
-
-                while (kv.getNext() != null) {
-                    kv = kv.getNext();
-                    put(kv);
-                }
+        for(WordFrequency w : old){
+            while (w != null){
+                put(w);
+                w = w.getNext();
             }
         }
     }

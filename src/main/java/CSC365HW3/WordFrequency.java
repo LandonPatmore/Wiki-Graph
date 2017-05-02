@@ -3,14 +3,14 @@ package CSC365HW3;
 /**
  * Created by landon on 4/30/17.
  */
-public class KeyVal {
+class WordFrequency {
     private String key;
-    private int count1;
-    private int count2;
+    private double count1;
+    private double count2;
 
-    private KeyVal next;
+    private WordFrequency next;
 
-    public KeyVal(String k, int c1, int c2) {
+    WordFrequency(String k, double c1, double c2) {
         this.key = k;
         this.count1 = c1;
         this.count2 = c2;
@@ -21,25 +21,25 @@ public class KeyVal {
      * @return gets the key
      */
 
-    public String getKey() {
+    String getKey() {
         return key;
     }
 
     /**
      *
-     * @return gets the next KeyVal for the CLinkedList
+     * @return gets the next WordFrequency for the CLinkedList
      */
 
-    public KeyVal getNext() {
+    WordFrequency getNext() {
         return next;
     }
 
     /**
      *
-     * @param next sets the next KeyVal for the CLinkedList
+     * @param next sets the next WordFrequency for the CLinkedList
      */
 
-    public void setNext(KeyVal next) {
+    void setNext(WordFrequency next) {
         this.next = next;
     }
 
@@ -47,7 +47,7 @@ public class KeyVal {
      * Adds to the count of the word
      */
 
-    public void add(int c1, int c2){
+    void add(double c1, double c2){
         this.count1 += c1;
         this.count2 += c2;
     }
@@ -57,30 +57,19 @@ public class KeyVal {
      * @return the amount of the count
      */
 
-    public int p1Count(){
+    double p1Count(){
         return count1;
     }
 
-    public int p2Count(){
+    double p2Count(){
         return count2;
     }
 
-    public void setCount1(int c){
-        this.count1 = c;
+    void zeroCount1(){
+        this.count1 = 0;
     }
 
-    public void setCount2(int c){
+    void setCount2(double c){
         this.count2 = c;
-    }
-
-
-    /**
-     *
-     * @return custom toString method for GUI
-     */
-
-    @Override
-    public String toString() {
-        return key;
     }
 }

@@ -3,7 +3,7 @@ package CSC365HW3;
 /**
  * Created by landon on 4/29/17.
  */
-public class WikiPage{
+class WikiPage{
     private String URL;
     private String title;
     private String[] children;
@@ -11,10 +11,10 @@ public class WikiPage{
     private WikiPage parent;
     private boolean seen;
     private boolean childrenCreated;
-    private HashTable vector;
+    private HashTable words;
 
 
-    public WikiPage(String u, String t, WikiPage p){
+    WikiPage(String u, String t, WikiPage p){
         this.URL = u;
         this.title = t;
         this.children = new String[4];
@@ -22,59 +22,59 @@ public class WikiPage{
         this.parent = p;
         this.seen = false;
         this.childrenCreated = false;
-        this.vector = new HashTable();
+        this.words = new HashTable();
     }
 
-    public String getURL() {
+    String getURL() {
         return URL;
     }
 
-    public String getTitle() {
+    String getTitle() {
         return title;
     }
 
-    public void setWordsVector(String[] w){
-        for(int i = 0; i < w.length; i++){
-            if(!(w[i].length() <=1)) {
-                vector.put(new KeyVal(w[i], 1, 0));
+    void setWordsVector(String[] w){
+        for (String s : w) {
+            if (!(s.length() <= 1)) {
+                words.put(new WordFrequency(s, 1, 0));
             }
         }
     }
 
-    public HashTable getVector(){
-        return vector;
+    HashTable getWords(){
+        return words;
     }
 
-    public void setChildren(String u){
+    void setChildren(String u){
         children[amountChildren] = u;
         amountChildren++;
     }
 
-    public String[] getChildren() {
+    String[] getChildren() {
         return children;
     }
 
-    public boolean noChildren(){
+    boolean noChildren(){
         return amountChildren == 0;
     }
 
-    public WikiPage getParent(){
+    WikiPage getParent(){
         return parent;
     }
 
-    public boolean isSeen() {
+    boolean isSeen() {
         return seen;
     }
 
-    public void setSeen(boolean seen) {
+    void setSeen(boolean seen) {
         this.seen = seen;
     }
 
-    public boolean isChildrenCreated() {
+    boolean isChildrenCreated() {
         return childrenCreated;
     }
 
-    public void setChildrenCreated(boolean childrenCreated) {
+    void setChildrenCreated(boolean childrenCreated) {
         this.childrenCreated = childrenCreated;
     }
 }
