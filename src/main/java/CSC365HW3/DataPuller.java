@@ -19,10 +19,12 @@ class DataPuller {
     private Random R_G;
     private WikiPage w;
     private ArrayList<String> pageLinks;
+    private int childrenAmount;
 
     DataPuller() {
         R_G = new Random();
         pageLinks = new ArrayList<String>();
+        this.childrenAmount = 8;
     }
 
     WikiPage pullData(String url, WikiPage parent, boolean dangler) throws IOException {
@@ -46,7 +48,7 @@ class DataPuller {
             if (a.length() >= 5) {
                 if (a.substring(0, 5).equals("/wiki")) {
                     if (!a.contains("Wikipedia") && !a.contains("File") && !a.contains("Help") && !a.contains("Portal") && !a.contains("Special") && !a.contains("Talk") && !a.contains("Category") && !a.contains("Template") && !a.contains("disambiguation")) {
-                        w = new WikiPage(url, t, parent);
+                        w = new WikiPage(url, t, parent, childrenAmount);
                         if(!dangler) {
                             pageLinks.add(a);
                         }
@@ -56,7 +58,7 @@ class DataPuller {
         }
 
         if(!dangler) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < childrenAmount; i++) {
                 int rnd = R_G.nextInt(pageLinks.size());
                 String BASE_URL = "https://en.wikipedia.org";
                 String decode = URLDecoder.decode(BASE_URL + pageLinks.get(rnd), "UTF-8");

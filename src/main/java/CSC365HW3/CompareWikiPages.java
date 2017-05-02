@@ -20,7 +20,6 @@ class CompareWikiPages {
         HashTable wordFrequencies = page1.getWords();
         wordFrequencies.mergeHashTables(page2.getWords());
         ArrayList<WordFrequency> k = wordFrequencies.toArrayList();
-        wordFrequencies.displayHash();
 
         double[] p1 = new double[k.size()];
         double[] p2 = new double[k.size()];

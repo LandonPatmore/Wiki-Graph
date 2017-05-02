@@ -110,9 +110,8 @@ class HashTable {
     void displayHash(){
         for(WordFrequency w : HT){
             while (w != null){
-                System.out.printf("%1$-45s %2$-45s %3$-45s",w.getKey(), w.p1Count(), w.p2Count());
+                System.out.printf("%1$-45s %2$-45s %3$-45s\n",w.getKey(), w.p1Count(), w.p2Count());
                 w = w.getNext();
-                System.out.println();
             }
         }
     }

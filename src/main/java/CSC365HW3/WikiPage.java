@@ -14,10 +14,10 @@ class WikiPage{
     private HashTable words;
 
 
-    WikiPage(String u, String t, WikiPage p){
+    WikiPage(String u, String t, WikiPage p, int c){
         this.URL = u;
         this.title = t;
-        this.children = new String[4];
+        this.children = new String[c];
         this.amountChildren = 0;
         this.parent = p;
         this.seen = false;
@@ -70,11 +70,11 @@ class WikiPage{
         this.seen = seen;
     }
 
-    boolean isChildrenCreated() {
+    boolean areChildrenCreated() {
         return childrenCreated;
     }
 
-    void setChildrenCreated(boolean childrenCreated) {
-        this.childrenCreated = childrenCreated;
+    void setChildrenCreated() {
+        this.childrenCreated = true;
     }
 }
