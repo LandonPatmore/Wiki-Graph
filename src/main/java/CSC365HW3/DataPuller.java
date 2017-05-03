@@ -1,6 +1,5 @@
 package CSC365HW3;
 
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,17 +16,16 @@ import java.util.Random;
 class DataPuller {
 
     private Random R_G;
-    private WikiPage w;
-    private ArrayList<String> pageLinks;
     private int childrenAmount;
 
     DataPuller() {
         R_G = new Random();
-        pageLinks = new ArrayList<String>();
-        this.childrenAmount = 8;
+        this.childrenAmount = 20;
     }
 
-    WikiPage pullData(String url, WikiPage parent, boolean dangler) throws IOException {
+    private WikiPage pullData(String url, WikiPage parent, boolean dangler) throws IOException {
+        ArrayList<String> pageLinks = new ArrayList<String>();
+
         Document doc = Jsoup.connect(url).get();
         Elements links = doc.select("a");
 
@@ -37,27 +35,20 @@ class DataPuller {
         Element title = doc.select("title").first();
         String t = title.text().replace(" - Wikipedia", "");
 
-        for(Element e: paragraphs){
+        for (Element e : paragraphs) {
             words.append(e.text().toLowerCase());
         }
 
         String[] splitWords = words.toString().replaceAll("[_$&+,:;=?@#|'<>.^*()%!\\[\\]\\-\"/{}]", " ").split(" ");
-
         for (Element e : links) {
             String a = e.attr("href");
-            if (a.length() >= 5) {
-                if (a.substring(0, 5).equals("/wiki")) {
-                    if (!a.contains("Wikipedia") && !a.contains("File") && !a.contains("Help") && !a.contains("Portal") && !a.contains("Special") && !a.contains("Talk") && !a.contains("Category") && !a.contains("Template") && !a.contains("disambiguation")) {
-                        w = new WikiPage(url, t, parent, childrenAmount);
-                        if(!dangler) {
-                            pageLinks.add(a);
-                        }
-                    }
-                }
+            if (a.length() >= 5 && a.substring(0, 5).equals("/wiki") && containsChecker(a) && !dangler) {
+                pageLinks.add(a);
             }
         }
 
-        if(!dangler) {
+        WikiPage w = new WikiPage(url, t, parent);
+        if (!dangler) {
             for (int i = 0; i < childrenAmount; i++) {
                 int rnd = R_G.nextInt(pageLinks.size());
                 String BASE_URL = "https://en.wikipedia.org";
@@ -66,10 +57,61 @@ class DataPuller {
             }
         }
 
-        w.setWordsVector(splitWords);
+        for (String s : splitWords) {
+            if (s.length() >= 1) {
+                w.addToWords(new WordCount(s, 1, 0));
+            }
+        }
 
         return w;
 
+    }
+
+    ArrayList<WikiPage> allWikiPages(String startingPage) throws IOException {
+        double cTime = System.nanoTime();
+        ArrayList<WikiPage> w = new ArrayList<WikiPage>();
+
+        w.add(pullData(startingPage, null, false));
+        try {
+            for (int i = 0; i < 1; i++) {
+                WikiPage wp = w.get(i);
+                for (String child : wp.getChildren()) {
+                    w.add(pullData(child, wp, false));
+                }
+                wp.setChildrenCreated();
+            }
+            for (int i = 0; i < w.size(); i++) {
+                WikiPage wp = w.get(i);
+                if (!wp.noChildren() && !wp.childrenCreated()) {
+                    for (String child : wp.getChildren()) {
+                        w.add(pullData(child, wp, true));
+                    }
+                    wp.setChildrenCreated();
+                }
+            }
+
+            debugPages(w);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        double seconds = ((System.nanoTime() - cTime) / 1000000) / 1000;
+        System.out.println("Done grabbing WikiPages in: " + seconds + " seconds.");
+        return w;
+    }
+
+    private void debugPages(ArrayList<WikiPage> w) {
+        System.out.printf("\n%1$-10s %2$-45s %3$-45s\n---------------------------------------------------------------------------------------\n", "Index", "Parent Node", "Child Node");
+        for (int i = 0; i < w.size(); i++) {
+            WikiPage s = w.get(i);
+            if (s.getParent() != null) {
+                System.out.printf("%1$-10s %2$-45s %3$-45s\n", i, s.getParent().getTitle(), s.getTitle());
+            }
+        }
+    }
+
+    private boolean containsChecker(String a) {
+        return !a.contains("Wikipedia") && !a.contains("File") && !a.contains("Help") && !a.contains("Portal") && !a.contains("Special") && !a.contains("Talk") && !a.contains("Category") && !a.contains("Template") && !a.contains("disambiguation");
     }
 
 

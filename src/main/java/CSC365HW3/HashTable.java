@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Custom HashTable Implementation
  */
 class HashTable {
-    private WordFrequency[] HT;
+    private WordCount[] HT;
     private int tableSize = 10000;
     private int count = 0;
 
@@ -19,26 +19,25 @@ class HashTable {
      */
 
     HashTable() {
-        HT = new WordFrequency[nextPrime(tableSize)];
+        HT = new WordCount[nextPrime(tableSize)];
     }
 
     /**
-     * Puts a WordFrequency into the HashTable and will automatically turn collisions into a CLinkedList
-     * @param wordFrequency takes a WordFrequency to put into the HashTable
+     * Puts a WordCount into the HashTable and will automatically turn collisions into a CLinkedList
+     * @param wordCount takes a WordCount to put into the HashTable
      */
 
-    void put(WordFrequency wordFrequency) {
-        Hashing h = new Hashing(wordFrequency.getKey(), wordFrequency.getKey().length());
-        int hash = h.hasher() % nextPrime(tableSize);
+    void put(WordCount wordCount) {
+        int hash = hHasher(wordCount);
 
         if (indexEmpty(hash)) {
-            HT[hash] = wordFrequency;
+            HT[hash] = wordCount;
             count++;
-        } else if (!indexEmpty(hash) && !HT[hash].getKey().equals(wordFrequency.getKey())) {
-            HT[hash].setNext(wordFrequency);
+        } else if (!indexEmpty(hash) && !HT[hash].getKey().equals(wordCount.getKey())) {
+            HT[hash].setNext(wordCount);
             count++;
-        } else if(get(wordFrequency)){
-            HT[hash].add(wordFrequency.p1Count(), wordFrequency.p2Count());
+        } else if(get(wordCount)){
+            HT[hash].add(wordCount.p1Count(), wordCount.p2Count());
         }
 
         if((float)(count / tableSize) > 0.66){
@@ -46,21 +45,25 @@ class HashTable {
         }
     }
 
+    int hHasher(WordCount w){
+        Hashing h = new Hashing(w.getKey(), w.getKey().length());
+        return h.hasher() % nextPrime(tableSize);
+    }
+
     /**
      *
-     * @param k takes a WordFrequency and checks to see if the key is within the HashTable
+     * @param k takes a WordCount and checks to see if the key is within the HashTable
      * @return either true or false
      */
 
-    boolean get(WordFrequency k) {
-        Hashing h = new Hashing(k.getKey(), k.getKey().length());
-        int hash = h.hasher() % nextPrime(tableSize);
+    boolean get(WordCount k) {
+        int hash = hHasher(k);
 
         if (indexEmpty(hash)) {
             return false;
         }
 
-        WordFrequency head = HT[hash];
+        WordCount head = HT[hash];
 
         while (!indexEmpty(hash) && !head.getKey().equals(k.getKey())) {
             head = head.getNext();
@@ -69,7 +72,7 @@ class HashTable {
         return true;
     }
 
-    private WordFrequency[] exposeHT(){
+    private WordCount[] exposeHT(){
         return HT;
     }
 
@@ -78,7 +81,7 @@ class HashTable {
     }
 
     void mergeHashTables(HashTable h){
-        for(WordFrequency w : h.exposeHT()){
+        for(WordCount w : h.exposeHT()){
             while(w != null){
                 w.setCount2(w.p1Count());
                 w.zeroCount1();
@@ -88,10 +91,10 @@ class HashTable {
         }
     }
 
-    ArrayList<WordFrequency> toArrayList(){
-        ArrayList<WordFrequency> k = new ArrayList<WordFrequency>();
+    ArrayList<WordCount> toArrayList(){
+        ArrayList<WordCount> k = new ArrayList<WordCount>();
 
-        for(WordFrequency w : HT){
+        for(WordCount w : HT){
             while(w != null){
                 k.add(w);
                 w = w.getNext();
@@ -108,7 +111,7 @@ class HashTable {
      */
 
     void displayHash(){
-        for(WordFrequency w : HT){
+        for(WordCount w : HT){
             while (w != null){
                 System.out.printf("%1$-45s %2$-45s %3$-45s\n",w.getKey(), w.p1Count(), w.p2Count());
                 w = w.getNext();
@@ -166,12 +169,12 @@ class HashTable {
     private void resize(){
         tableSize = 2 * tableSize;
         tableSize = nextPrime(tableSize);
-        WordFrequency[] old = HT;
+        WordCount[] old = HT;
 
-        HT = new WordFrequency[tableSize];
+        HT = new WordCount[tableSize];
         count = 0;
 
-        for(WordFrequency w : old){
+        for(WordCount w : old){
             while (w != null){
                 put(w);
                 w = w.getNext();

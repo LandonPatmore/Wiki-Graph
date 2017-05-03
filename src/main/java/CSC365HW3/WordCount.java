@@ -3,14 +3,14 @@ package CSC365HW3;
 /**
  * Created by landon on 4/30/17.
  */
-class WordFrequency {
+class WordCount {
     private String key;
     private double count1;
     private double count2;
 
-    private WordFrequency next;
+    private WordCount next;
 
-    WordFrequency(String k, double c1, double c2) {
+    WordCount(String k, double c1, double c2) {
         this.key = k;
         this.count1 = c1;
         this.count2 = c2;
@@ -27,19 +27,19 @@ class WordFrequency {
 
     /**
      *
-     * @return gets the next WordFrequency for the CLinkedList
+     * @return gets the next WordCount for the CLinkedList
      */
 
-    WordFrequency getNext() {
+    WordCount getNext() {
         return next;
     }
 
     /**
      *
-     * @param next sets the next WordFrequency for the CLinkedList
+     * @param next sets the next WordCount for the CLinkedList
      */
 
-    void setNext(WordFrequency next) {
+    void setNext(WordCount next) {
         this.next = next;
     }
 
