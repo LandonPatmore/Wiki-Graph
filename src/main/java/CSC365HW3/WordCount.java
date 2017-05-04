@@ -5,15 +5,15 @@ package CSC365HW3;
  */
 class WordCount {
     private String key;
-    private double count1;
-    private double count2;
+    private double p1;
+    private double p2;
 
     private WordCount next;
 
-    WordCount(String k, double c1, double c2) {
+    WordCount(String k, double p1, double p2) {
         this.key = k;
-        this.count1 = c1;
-        this.count2 = c2;
+        this.p1 = p1;
+        this.p2 = p2;
     }
 
     /**
@@ -47,9 +47,9 @@ class WordCount {
      * Adds to the count of the word
      */
 
-    void add(double c1, double c2){
-        this.count1 += c1;
-        this.count2 += c2;
+    void add(double p1, double p2){
+        this.p1 += p1;
+        this.p2 += p2;
     }
 
     /**
@@ -57,19 +57,18 @@ class WordCount {
      * @return the amount of the count
      */
 
-    double p1Count(){
-        return count1;
+    void setP2(double c){
+        this.p2 = c;
     }
 
-    double p2Count(){
-        return count2;
+    void zeroP1(){
+        this.p1 = 0;
     }
 
-    void zeroCount1(){
-        this.count1 = 0;
+    double getP1(){
+        return p1;
     }
-
-    void setCount2(double c){
-        this.count2 = c;
+    double getP2(){
+        return p2;
     }
 }

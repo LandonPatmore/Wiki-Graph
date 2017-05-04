@@ -3,6 +3,9 @@ package CSC365HW3;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by landon on 5/2/17.
@@ -10,7 +13,7 @@ import java.io.FileReader;
 public enum MostCommonWords {
     INSTANCE;
 
-    private String[] commonWords = new String[97];
+    private HashSet<String> commonWords= new HashSet<>();
     private int count = 0;
 
     void readCommonWords() throws FileNotFoundException {
@@ -18,19 +21,14 @@ public enum MostCommonWords {
             BufferedReader b = new BufferedReader(new FileReader("commonWords.txt"));
             String currentLine;
             while ((currentLine = b.readLine()) != null){
-                add(currentLine);
+                commonWords.add(currentLine);
             }
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    private void add(String s){
-        commonWords[count] = s;
-        count++;
-    }
-
-    String[] getCommonWords(){
+    HashSet<String> getCommonWords(){
         return commonWords;
     }
 }

@@ -1,6 +1,8 @@
 package CSC365HW3;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by landon on 5/1/17.
@@ -17,16 +19,21 @@ class CompareWikiPages {
     }
 
     double compare(){
-        HashTable wordFrequencies = page1.getWords();
-        wordFrequencies.mergeHashTables(page2.getWords());
-        ArrayList<WordCount> k = wordFrequencies.toArrayList();
+        HashTable h = new HashTable();
+
+
+        for(WordCount w : page1.getWords().toArrayList()){
+            h.put(w);
+        }
+        h.mergeHashTables(page2.getWords());
+        ArrayList<WordCount> k = h.toArrayList();
 
         double[] p1 = new double[k.size()];
         double[] p2 = new double[k.size()];
 
         for(int i = 0; i < p1.length; i++){
-            p1[i] = k.get(i).p1Count();
-            p2[i] = k.get(i).p2Count();
+            p1[i] = k.get(i).getP1() / page1.getWords().getCount(); //<- to normalize the words in the page
+            p2[i] = k.get(i).getP2() / page2.getWords().getCount();
         }
 
         return cosineSimilarity(p1, p2);

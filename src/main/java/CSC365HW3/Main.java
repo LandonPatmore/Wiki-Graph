@@ -15,21 +15,21 @@ public class Main {
 //        }
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 //        launch(args);
 
-        ArrayList<WikiPage> w;
-        DataPuller d = new DataPuller();
-        System.out.println("Grabbing WikiPages...");
-        w = d.allWikiPages("https://en.wikipedia.org/wiki/Formula_One");
+        MostCommonWords.INSTANCE.readCommonWords();
+        DataPuller d = new DataPuller("https://en.wikipedia.org/wiki/New_Jersey");
+        ArrayList<WikiPage> w = d.grabData();
+        d.toDOTFile();
 
-//        CompareWikiPages c;
-//        for(WikiPage p : w){
-//            if(!w.get(0).getURL().equalsIgnoreCase(p.getURL())){
-//                c = new CompareWikiPages(w.get(0), p);
-//                System.out.printf("%1$-65s %2$-45s\n", p.getTitle() +" : ", c.compare());
-//            }
-//        }
+        CompareWikiPages c;
+        for(WikiPage p : w){
+            if(!w.get(0).getURL().equalsIgnoreCase(p.getURL())){
+                c = new CompareWikiPages(w.get(0), p);
+                System.out.printf("%1$-65s %2$-45s\n", p.getTitle() +" : ", c.compare());
+            }
+        }
 
 
 

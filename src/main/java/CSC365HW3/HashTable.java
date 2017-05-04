@@ -5,6 +5,7 @@ package CSC365HW3;
  */
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Custom HashTable Implementation
@@ -13,6 +14,7 @@ class HashTable {
     private WordCount[] HT;
     private int tableSize = 10000;
     private int count = 0;
+    private HashSet<String> commonWords = MostCommonWords.INSTANCE.getCommonWords();
 
     /**
      * creates a new Array of CLinkedLists
@@ -30,22 +32,24 @@ class HashTable {
     void put(WordCount wordCount) {
         int hash = hHasher(wordCount);
 
-        if (indexEmpty(hash)) {
-            HT[hash] = wordCount;
-            count++;
-        } else if (!indexEmpty(hash) && !HT[hash].getKey().equals(wordCount.getKey())) {
-            HT[hash].setNext(wordCount);
-            count++;
-        } else if(get(wordCount)){
-            HT[hash].add(wordCount.p1Count(), wordCount.p2Count());
-        }
+        if(!commonWords.contains(wordCount.getKey())) {
+            if (indexEmpty(hash)) {
+                HT[hash] = wordCount;
+                count++;
+            } else if (!indexEmpty(hash) && !HT[hash].getKey().equals(wordCount.getKey())) {
+                HT[hash].setNext(wordCount);
+                count++;
+            } else if (get(wordCount)) {
+                HT[hash].add(wordCount.getP1(), wordCount.getP2());
+            }
 
-        if((float)(count / tableSize) > 0.66){
-            resize();
+            if ((float) (count / tableSize) > 0.66) {
+                resize();
+            }
         }
     }
 
-    int hHasher(WordCount w){
+    private int hHasher(WordCount w){
         Hashing h = new Hashing(w.getKey(), w.getKey().length());
         return h.hasher() % nextPrime(tableSize);
     }
@@ -56,7 +60,7 @@ class HashTable {
      * @return either true or false
      */
 
-    boolean get(WordCount k) {
+    private boolean get(WordCount k) {
         int hash = hHasher(k);
 
         if (indexEmpty(hash)) {
@@ -67,6 +71,9 @@ class HashTable {
 
         while (!indexEmpty(hash) && !head.getKey().equals(k.getKey())) {
             head = head.getNext();
+            if(head == null){
+                return false;
+            }
         }
 
         return true;
@@ -76,15 +83,15 @@ class HashTable {
         return HT;
     }
 
-    int length(){
+    int getCount(){
         return count;
     }
 
     void mergeHashTables(HashTable h){
         for(WordCount w : h.exposeHT()){
             while(w != null){
-                w.setCount2(w.p1Count());
-                w.zeroCount1();
+                w.setP2(w.getP1());
+                w.zeroP1();
                 this.put(w);
                 w = w.getNext();
             }
@@ -92,7 +99,7 @@ class HashTable {
     }
 
     ArrayList<WordCount> toArrayList(){
-        ArrayList<WordCount> k = new ArrayList<WordCount>();
+        ArrayList<WordCount> k = new ArrayList<>();
 
         for(WordCount w : HT){
             while(w != null){
@@ -104,8 +111,6 @@ class HashTable {
         return k;
     }
 
-
-
     /**
      * Testing method to see how the HashTable was placing KeyVals
      */
@@ -113,7 +118,7 @@ class HashTable {
     void displayHash(){
         for(WordCount w : HT){
             while (w != null){
-                System.out.printf("%1$-45s %2$-45s %3$-45s\n",w.getKey(), w.p1Count(), w.p2Count());
+                System.out.printf("%1$-45s %2$-45s %3$-45s\n",w.getKey(), w.getP1(), w.getP2());
                 w = w.getNext();
             }
         }
