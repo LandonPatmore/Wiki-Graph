@@ -52,22 +52,10 @@ class WordCount {
         this.p2 += p2;
     }
 
-    /**
-     *
-     * @return the amount of the count
-     */
-
-    void setP2(double c){
-        this.p2 = c;
-    }
-
-    void zeroP1(){
-        this.p1 = 0;
-    }
-
     double getP1(){
         return p1;
     }
+
     double getP2(){
         return p2;
     }

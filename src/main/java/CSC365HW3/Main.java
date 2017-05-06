@@ -1,7 +1,7 @@
 package CSC365HW3;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Main {
 
@@ -19,17 +19,24 @@ public class Main {
 //        launch(args);
 
         MostCommonWords.INSTANCE.readCommonWords();
-        DataPuller d = new DataPuller("https://en.wikipedia.org/wiki/New_Jersey");
+        DataPuller d = new DataPuller("https://en.wikipedia.org/wiki/Formula_One");
         ArrayList<WikiPage> w = d.grabData();
-        d.toDOTFile();
+        Graph g = new Graph(w);
+        g.getMap();
+        System.out.println();
+        g.showEdges();
+        System.out.println();
+        g.dotGraph();
 
-        CompareWikiPages c;
-        for(WikiPage p : w){
-            if(!w.get(0).getURL().equalsIgnoreCase(p.getURL())){
-                c = new CompareWikiPages(w.get(0), p);
-                System.out.printf("%1$-65s %2$-45s\n", p.getTitle() +" : ", c.compare());
-            }
-        }
+//        Graph.Edge e = new Graph.Edge("hi", "bye", 1);
+//        Graph.Edge f = new Graph.Edge("hi", "bye", 56);
+//        System.out.println(e.compareTo(f));
+//        System.out.println(e.equals(f));
+//        HashSet<Graph.Edge> edges = new HashSet<>();
+//        edges.add(e);
+//        edges.add(f);
+//        edges.forEach(q -> System.out.println(q.getSrc()));
+
 
 
 

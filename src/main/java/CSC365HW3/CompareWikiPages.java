@@ -21,19 +21,20 @@ class CompareWikiPages {
     double compare(){
         HashTable h = new HashTable();
 
+        if(page1 == null || page2 == null)
+            return 0;
 
-        for(WordCount w : page1.getWords().toArrayList()){
-            h.put(w);
-        }
+        h.mergeArrayList(page1.getWords().toArrayList());
         h.mergeHashTables(page2.getWords());
+
         ArrayList<WordCount> k = h.toArrayList();
 
         double[] p1 = new double[k.size()];
         double[] p2 = new double[k.size()];
 
         for(int i = 0; i < p1.length; i++){
-            p1[i] = k.get(i).getP1() / page1.getWords().getCount(); //<- to normalize the words in the page
-            p2[i] = k.get(i).getP2() / page2.getWords().getCount();
+            p1[i] = k.get(i).getP1() / page1.getAmountOfWords(); //<- to normalize the words in the page
+            p2[i] = k.get(i).getP2() / page2.getAmountOfWords();
         }
 
         return cosineSimilarity(p1, p2);

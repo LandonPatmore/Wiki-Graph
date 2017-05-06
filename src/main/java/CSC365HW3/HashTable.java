@@ -14,7 +14,6 @@ class HashTable {
     private WordCount[] HT;
     private int tableSize = 10000;
     private int count = 0;
-    private HashSet<String> commonWords = MostCommonWords.INSTANCE.getCommonWords();
 
     /**
      * creates a new Array of CLinkedLists
@@ -32,7 +31,7 @@ class HashTable {
     void put(WordCount wordCount) {
         int hash = hHasher(wordCount);
 
-        if(!commonWords.contains(wordCount.getKey())) {
+        if(!MostCommonWords.INSTANCE.getCommonWords().contains(wordCount.getKey())) {
             if (indexEmpty(hash)) {
                 HT[hash] = wordCount;
                 count++;
@@ -90,12 +89,14 @@ class HashTable {
     void mergeHashTables(HashTable h){
         for(WordCount w : h.exposeHT()){
             while(w != null){
-                w.setP2(w.getP1());
-                w.zeroP1();
-                this.put(w);
+                this.put(new WordCount(w.getKey(), 0, w.getP1()));
                 w = w.getNext();
             }
         }
+    }
+
+    void mergeArrayList(ArrayList<WordCount> w){
+        w.forEach(this::put);
     }
 
     ArrayList<WordCount> toArrayList(){

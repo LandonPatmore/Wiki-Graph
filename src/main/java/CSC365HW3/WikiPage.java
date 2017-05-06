@@ -9,24 +9,22 @@ class WikiPage{
     private String URL;
     private String title;
     private ArrayList<String> children;
-    private int amountChildren;
     private WikiPage parent;
-    private boolean childrenCreated;
     private HashTable words;
+    private boolean childrenCreated;
+    private int amountChildren;
+    private int amountOfWords;
 
 
     WikiPage(String u, String t, WikiPage p){
         this.URL = u;
         this.title = t;
         this.children = new ArrayList<>();
-        this.amountChildren = 0;
         this.parent = p;
-        this.childrenCreated = false;
         this.words = new HashTable();
-    }
-
-    String getURL() {
-        return URL;
+        this.amountChildren = 0;
+        this.amountOfWords = 0;
+        this.childrenCreated = false;
     }
 
     String getTitle() {
@@ -35,23 +33,20 @@ class WikiPage{
 
     void addToWords(WordCount w){
         words.put(w);
+        this.amountOfWords++;
     }
 
     HashTable getWords(){
         return words;
     }
 
-    void setChildren(String u){
+    void addChildren(String u){
         children.add(u);
         amountChildren++;
     }
 
     ArrayList<String> getChildren() {
         return children;
-    }
-
-    boolean noChildren(){
-        return amountChildren == 0;
     }
 
     WikiPage getParent(){
@@ -64,5 +59,13 @@ class WikiPage{
 
     void setChildrenCreated() {
         this.childrenCreated = true;
+    }
+
+    boolean noChildren(){
+        return amountChildren == 0;
+    }
+
+    int getAmountOfWords(){
+        return amountOfWords;
     }
 }
