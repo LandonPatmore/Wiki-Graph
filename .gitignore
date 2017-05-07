@@ -24,7 +24,6 @@ hs_err_pid*
 .idea/codeStyleSettings.xml
 target/
 .idea/
-pom.xml
 365HW1.iml
 #
 #
@@ -64,3 +63,6 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+pom.xml
+src/main/resources/
+src/test/
