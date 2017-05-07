@@ -1,5 +1,6 @@
 package CSC365HW3;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -38,7 +39,7 @@ public class Dijkstra {
     }
 
     //Singular Point on the graph that represents a single Wikipedia page
-    public static class Page{
+    public static class Page implements Serializable{
         private final String title;
         private Page previousPage;
         private int distance;
@@ -63,7 +64,7 @@ public class Dijkstra {
      * Represents the distance between two different pages.  The source point will have the edge list, so there is no point in requiring the edge class to have a list of edges.
      */
 
-    public static class Edge{
+    public static class Edge implements Serializable{
         private Page dest;
         private int weight;
 
@@ -71,6 +72,32 @@ public class Dijkstra {
             this.dest = dest;
             this.weight = weight;
         }
+    }
+
+    void serializePages(){
+
+        try{
+            ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("CachedPages.ser"));
+            o.writeObject(pages);
+            o.close();
+        } catch (Exception e){
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("unchecked") // Don't like this :(
+    HashMap<String, Page> readPages(){
+        try {
+            ObjectInputStream i = new ObjectInputStream(new FileInputStream("CachedPages.ser"));
+            HashMap<String, Page> h = (HashMap<String, Page>) i.readObject();
+            i.close();
+            return h;
+        } catch (Exception e){
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void pathFinder(String source, String destination){
