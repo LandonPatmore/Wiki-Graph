@@ -3,14 +3,18 @@ package CSC365HW3;
 /**
  * Created by landon on 4/30/17.
  */
-class WordCount {
+
+/**
+ * Custom class to represent a word
+ */
+class Word {
     private String key;
     private double p1;
     private double p2;
 
-    private WordCount next;
+    private Word next;
 
-    WordCount(String k, double p1, double p2) {
+    Word(String k, double p1, double p2) {
         this.key = k;
         this.p1 = p1;
         this.p2 = p2;
@@ -27,19 +31,19 @@ class WordCount {
 
     /**
      *
-     * @return gets the next WordCount for the CLinkedList
+     * @return gets the next Word for the linked list
      */
 
-    WordCount getNext() {
+    Word getNext() {
         return next;
     }
 
     /**
      *
-     * @param next sets the next WordCount for the CLinkedList
+     * @param next sets the next Word for the linked list
      */
 
-    void setNext(WordCount next) {
+    void setNext(Word next) {
         this.next = next;
     }
 
@@ -52,9 +56,19 @@ class WordCount {
         this.p2 += p2;
     }
 
+    /**
+     *
+     * @return page 1 count
+     */
+
     double getP1(){
         return p1;
     }
+
+    /**
+     *
+     * @return page 2 count
+     */
 
     double getP2(){
         return p2;

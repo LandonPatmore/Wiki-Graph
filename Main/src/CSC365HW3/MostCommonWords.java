@@ -10,11 +10,14 @@ import java.util.Set;
 /**
  * Created by landon on 5/2/17.
  */
-public enum MostCommonWords {
+
+/**
+ * Custom class to read a file of the 100 most common words
+ */
+enum MostCommonWords {
     INSTANCE;
 
     private HashSet<String> commonWords= new HashSet<>();
-    private int count = 0;
 
     void readCommonWords() throws FileNotFoundException {
         try {

@@ -6,21 +6,19 @@ import java.util.*;
 /**
  * Created by landon on 5/7/17.
  */
-public class Dijkstra {
+class Dijkstra {
 
     private HashMap<String, Page> pages;
 
-    public Dijkstra(){
+    Dijkstra(){
         pages = new HashMap<>();
     }
 
     //Method to add page to the hashmap
-    public void addPage(String title){
-        if(pages.containsKey(title)){
-            System.out.println("Page already exists!");
-            return;
+    void addPage(String title){
+        if(!pages.containsKey(title)){
+            pages.put(title, new Page(title));
         }
-        pages.put(title, new Page(title));
     }
 
     /**
@@ -29,7 +27,7 @@ public class Dijkstra {
      * @param p2 page 2
      * @param weight weight
      */
-    public void addEdge(String p1, String p2, int weight){
+    void addEdge(String p1, String p2, double weight){
         if(!pages.containsKey(p1) && !pages.containsKey(p2)){
             System.out.println("Both Pages need to exist to create an edge between.");
             return;
@@ -38,11 +36,14 @@ public class Dijkstra {
         pages.get(p2).neighborPages.add(new Edge(pages.get(p1), weight));
     }
 
-    //Singular Point on the graph that represents a single Wikipedia page
-    public static class Page implements Serializable{
+    /**
+     * Class to represent a single page
+     */
+
+    private static class Page implements Serializable{
         private final String title;
         private Page previousPage;
-        private int distance;
+        private double distance;
         private List<Edge> neighborPages;
 
         public Page(String title){
@@ -61,18 +62,39 @@ public class Dijkstra {
     }
 
     /**
-     * Represents the distance between two different pages.  The source point will have the edge list, so there is no point in requiring the edge class to have a list of edges.
+     * Represents the distance between two different pages.  The source point will have a list of edges to destination pages.
      */
 
-    public static class Edge implements Serializable{
+    private static class Edge implements Serializable{
         private Page dest;
-        private int weight;
+        private double weight;
 
-        public Edge(Page dest, int weight){
+        Edge(Page dest, double weight){
             this.dest = dest;
             this.weight = weight;
         }
     }
+
+    /**
+     *
+     * @return whether or not the serialized file already exists
+     */
+
+    boolean checkSerializedExists() {
+        File checkPages = new File("CachedPages.ser");
+
+        if(checkPages.exists()){
+            System.out.println("Cache of pages exists!");
+            pages = readPages();
+            return true;
+        }
+        System.out.println("Cache of pages does not exist");
+        return false;
+    }
+
+    /**
+     * Serializes the hashmap of pages
+     */
 
     void serializePages(){
 
@@ -85,6 +107,11 @@ public class Dijkstra {
             e.printStackTrace();
         }
     }
+
+    /**
+     *
+     * @return the read file and a hashmap that is recreated from the serialized file
+     */
 
     @SuppressWarnings("unchecked") // Don't like this :(
     HashMap<String, Page> readPages(){
@@ -100,10 +127,21 @@ public class Dijkstra {
         return null;
     }
 
-    public void pathFinder(String source, String destination){
+    /**
+     * Method to find the path between two pages using Dijkstra's Algorithm on the graph created from all the wikipages
+     * @param source source page
+     * @param destination destination page
+     */
+
+    void pathFinder(String source, String destination){
+
+        if(!pages.containsKey(source) || !pages.containsKey(destination)){
+            System.out.println("Source or Destination does not exist.");
+            return;
+        }
 
         //Priority Queue that sorts based on the known page distances
-        Queue<Page> notVisited = new PriorityQueue<>(pages.size(), Comparator.comparingInt(o -> o.distance));
+        Queue<Page> notVisited = new PriorityQueue<>(pages.size(), Comparator.comparingDouble(o -> o.distance));
 
         //Now add all the pages to the queue while they all have a distance of Integer.MAX_VALUE
         notVisited.addAll(pages.values());
@@ -116,8 +154,8 @@ public class Dijkstra {
 
         while (true){
             for(Edge e: current.neighborPages){
-                final int newDistance = current.distance + e.weight;
-                final int oldDistance = e.dest.distance;
+                final double newDistance = current.distance + e.weight;
+                final double oldDistance = e.dest.distance;
                 if(newDistance < oldDistance){
                     e.dest.distance = newDistance;
                     e.dest.previousPage = current;

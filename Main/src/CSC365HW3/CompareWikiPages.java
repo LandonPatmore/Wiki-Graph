@@ -1,33 +1,33 @@
 package CSC365HW3;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by landon on 5/1/17.
  */
+
+/**
+ * Custom implementation of comparing two wikipages
+ */
 class CompareWikiPages {
 
-    private WikiPage page1;
-    private WikiPage page2;
+    /**
+     *
+     * @param page1 Page 1 wikipage
+     * @param page2 Page 2 wikipage
+     * @return the CosineSimilarity of the pages
+     */
 
-
-    CompareWikiPages(WikiPage w1, WikiPage w2){
-        this.page1 = w1;
-        this.page2 = w2;
-    }
-
-    double compare(){
+    double compare(WikiPage page1, WikiPage page2){
         HashTable h = new HashTable();
 
         if(page1 == null || page2 == null)
             return 0;
 
-        h.mergeArrayList(page1.getWords().toArrayList());
+        h.addWordsFromArrayList(page1.getWords().toArrayList());
         h.mergeHashTables(page2.getWords());
 
-        ArrayList<WordCount> k = h.toArrayList();
+        ArrayList<Word> k = h.toArrayList();
 
         double[] p1 = new double[k.size()];
         double[] p2 = new double[k.size()];
@@ -39,6 +39,13 @@ class CompareWikiPages {
 
         return cosineSimilarity(p1, p2);
     }
+
+    /**
+     *
+     * @param p1 vector of doubles
+     * @param p2 vecotr of doubles
+     * @return the cosine similarity of 2 vectors
+     */
 
     private double cosineSimilarity(double[] p1, double[] p2) {
         double dotProduct = 0.0;

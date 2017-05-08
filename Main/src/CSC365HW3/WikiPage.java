@@ -5,65 +5,85 @@ import java.util.ArrayList;
 /**
  * Created by landon on 4/29/17.
  */
+
+/**
+ * Custom class to represent a wikipage
+ */
 class WikiPage{
-    private String URL;
     private String title;
     private ArrayList<String> children;
     private WikiPage parent;
     private HashTable words;
-    private boolean childrenCreated;
-    private int amountChildren;
     private int amountOfWords;
 
 
-    WikiPage(String u, String t, WikiPage p){
-        this.URL = u;
+    WikiPage(String t, WikiPage p){
         this.title = t;
         this.children = new ArrayList<>();
         this.parent = p;
         this.words = new HashTable();
-        this.amountChildren = 0;
         this.amountOfWords = 0;
-        this.childrenCreated = false;
     }
+
+    /**
+     *
+     * @return the title of the wikipage
+     */
 
     String getTitle() {
         return title;
     }
 
-    void addToWords(WordCount w){
+    /**
+     *
+     * @param w word to be added to a hashtable of words
+     */
+
+    void addToWords(Word w){
         words.put(w);
         this.amountOfWords++;
     }
+
+    /**
+     *
+     * @return hashtable of words
+     */
 
     HashTable getWords(){
         return words;
     }
 
+    /**
+     *
+     * @param u child url to be added
+     */
+
     void addChildren(String u){
         children.add(u);
-        amountChildren++;
     }
+
+    /**
+     *
+     * @return the ArrayList of children URLS
+     */
 
     ArrayList<String> getChildren() {
         return children;
     }
 
+    /**
+     *
+     * @return the parent wikipage of this wikipage
+     */
+
     WikiPage getParent(){
         return parent;
     }
 
-    boolean childrenCreated() {
-        return childrenCreated;
-    }
-
-    void setChildrenCreated() {
-        this.childrenCreated = true;
-    }
-
-    boolean noChildren(){
-        return amountChildren == 0;
-    }
+    /**
+     *
+     * @return the amount of words inside the wikipage
+     */
 
     int getAmountOfWords(){
         return amountOfWords;
