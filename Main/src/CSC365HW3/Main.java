@@ -1,35 +1,26 @@
 package CSC365HW3;
 
-import java.util.ArrayList;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class Main {
+public class Main extends Application {
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
 
-    public static void main(String[] args) throws Exception {
-        Dijkstra dj = new Dijkstra();
-        if(!dj.checkSerializedExists()) {
-            MostCommonWords.INSTANCE.readCommonWords();
-            DataPuller d = new DataPuller("https://en.wikipedia.org/wiki/Formula_One");
-            ArrayList<WikiPage> w = d.grabData();
-            CompareWikiPages c = new CompareWikiPages();
+        Parent root = FXMLLoader.load(getClass().getResource("GUI.fxml"));
+        primaryStage.setTitle("Stocks HashTable");
+        primaryStage.setScene(new Scene(root, 430, 685));
+        primaryStage.setResizable(false);
+        primaryStage.show();
 
-            w.forEach(page -> {
-                if (page.getParent() != null) {
-                    WikiPage parent = page.getParent();
-
-                    dj.addPage(page.getTitle());
-                    dj.addPage(parent.getTitle());
-                    dj.addEdge(parent.getTitle(), page.getTitle(), c.compare(parent, page));
-                }
-            });
-
-            dj.serializePages();
-        }
-        System.out.println();
-        dj.pathFinder("Formula One", "Gasoline");
+    }
 
 
-
-
+    public static void main(String[] args) {
+        launch(args);
     }
 }

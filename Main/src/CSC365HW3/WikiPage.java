@@ -1,5 +1,6 @@
 package CSC365HW3;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Custom class to represent a wikipage
  */
-class WikiPage{
+class WikiPage implements Serializable{
     private String title;
     private ArrayList<String> children;
     private WikiPage parent;

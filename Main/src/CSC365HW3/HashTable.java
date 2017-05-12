@@ -4,12 +4,13 @@ package CSC365HW3;
  * Created by landon on 4/30/17.
  */
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Custom HashTable Implementation
  */
-class HashTable {
+class HashTable implements Serializable{
     private Word[] HT;
     private int tableSize = 10000;
     private int count = 0;

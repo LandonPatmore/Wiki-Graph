@@ -4,10 +4,12 @@ package CSC365HW3;
  * Created by landon on 4/30/17.
  */
 
+import java.io.Serializable;
+
 /**
  * Custom class to represent a word
  */
-class Word {
+class Word implements Serializable{
     private String key;
     private double p1;
     private double p2;

@@ -22,7 +22,7 @@ class DataPuller {
 
     private Random R_G = new Random();
     private static final int AMOUNT_LINKS = 5;
-    private static final int DEPTH = 3;
+    private static final int DEPTH = 1;
     private String START_URL;
     private int counter = 0;
     private ConcurrentLinkedQueue<WikiPage> WikiPagesList = new ConcurrentLinkedQueue<>();
