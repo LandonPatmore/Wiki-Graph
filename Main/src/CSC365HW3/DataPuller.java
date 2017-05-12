@@ -19,10 +19,8 @@ import java.util.concurrent.RecursiveTask;
  * Custom class to pull wikipages, their words, and their links
  */
 class DataPuller {
-
-    private Random R_G = new Random();
     private static final int AMOUNT_LINKS = 5;
-    private static final int DEPTH = 1;
+    private static final int DEPTH = 3;
     private String START_URL;
     private int counter = 0;
     private ConcurrentLinkedQueue<WikiPage> WikiPagesList = new ConcurrentLinkedQueue<>();
@@ -66,7 +64,6 @@ class DataPuller {
             wp = new WikiPage(title, parent);
 
             for (int i = 0; i < AMOUNT_LINKS; i++) {
-                //int rnd = R_G.nextInt(links.size());
                 String BASE_URL = "https://en.wikipedia.org";
                 String decode = URLDecoder.decode(BASE_URL + pages.get(i), "UTF-8");
                 wp.addChildren(decode);

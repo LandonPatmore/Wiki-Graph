@@ -181,6 +181,10 @@ class Graphing {
             }
             current = notVisited.poll();
         }
+        if(visited.size() == pages.values().size()){
+            System.out.println("Size is: " + (visited.size() - pages.values().size()));
+            System.out.println("That we means we have 1 spanning tree!");
+        }
         return MST;
     }
 
