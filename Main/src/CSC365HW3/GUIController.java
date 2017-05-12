@@ -46,12 +46,21 @@ public class GUIController {
     @FXML
     private ListView<String> path;
 
+    /**
+     * Initialization method
+     */
 
     public void initialize(){
         this.pages = new ArrayList<>();
         this.dj = new Graphing();
         this.pageChecker = new HashSet<>();
     }
+
+    /**
+     * Helper method
+     * @return whether or not a cache of pages exists
+     * @throws Exception
+     */
 
     boolean cacheCheck() throws Exception {
         if(!dj.checkSerializedExists()) {
@@ -64,14 +73,21 @@ public class GUIController {
         }
     }
 
+    /**
+     * Handles when the user wants to check the cache and sets the lists of pages if the cache exists
+     * @throws Exception
+     */
+
     @FXML
     void handleCacheCheck() throws Exception {
         if(cacheCheck()) {
             setter();
         }
-
-
     }
+
+    /**
+     * Method to update the GUI with the path length, most similar pages, and MST weight
+     */
 
     @FXML
     void handlePathSubmit(){
@@ -94,6 +110,11 @@ public class GUIController {
 
     }
 
+    /**
+     * Method to grab URL specified with all children links
+     * @throws Exception
+     */
+
     @FXML
     void onEnter() throws Exception {
         pages.clear();
@@ -113,6 +134,10 @@ public class GUIController {
 
         setter();
     }
+
+    /**
+     * Helper method to set the lists of source and destination pages
+     */
 
     void setter(){
         pageList = FXCollections.observableList(pages);

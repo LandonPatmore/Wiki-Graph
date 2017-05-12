@@ -9,14 +9,22 @@ import java.util.*;
 class Graphing {
 
     private HashMap<String, Page> pages;
-    private CompareWikiPages co = new CompareWikiPages();
-    private HashMap<String, WikiPage> fu = new HashMap<>();
-    private ArrayList<String> list = new ArrayList<>();
-    private Set<String> pageChecker = new HashSet<>();
+    private CompareWikiPages comparer = new CompareWikiPages();
+    private HashMap<String, WikiPage> wikiPages;
+    private ArrayList<String> list;
+    private Set<String> pageChecker;
 
     Graphing() {
         this.pages = new HashMap<>();
+        this.wikiPages = new HashMap<>();
+        this.list = new ArrayList<>();
+        this.pageChecker = new HashSet<>();
     }
+
+    /**
+     * Adds all the Wikipages from an ArrayList to the Graph
+     * @param wlist ArrayList<WikiPage></>
+     */
 
     void addAll(ArrayList<WikiPage> wlist){
         wlist.forEach(w ->{
@@ -25,16 +33,20 @@ class Graphing {
                 list.add(w.getTitle());
             }
 
-            fu.put(w.getTitle(), w);
+            wikiPages.put(w.getTitle(), w);
             if(w.getParent() != null) {
                 addPage(w.getTitle());
                 addPage(w.getParent().getTitle());
-                addEdge(w.getParent().getTitle(), w.getTitle(), co.compare(w.getParent(), w));
+                addEdge(w.getParent().getTitle(), w.getTitle(), comparer.compare(w.getParent(), w));
             }
         });
     }
 
-    //Method to add page to the hashmap
+    /**
+     * Adds page to HashMap
+     * @param title title of page
+     */
+
     private void addPage(String title){
         if(!pages.containsKey(title)){
             pages.put(title, new Page(title));
@@ -121,7 +133,7 @@ class Graphing {
         try{
             ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("CachedPages.ser"));
             o.writeObject(pages);
-            o.writeObject(fu);
+            o.writeObject(wikiPages);
             o.writeObject(list);
             o.close();
         } catch (Exception e){
@@ -140,7 +152,7 @@ class Graphing {
         try {
             ObjectInputStream i = new ObjectInputStream(new FileInputStream("CachedPages.ser"));
             pages = (HashMap<String, Page>) i.readObject();
-            fu = (HashMap<String, WikiPage>) i.readObject();
+            wikiPages = (HashMap<String, WikiPage>) i.readObject();
             list = (ArrayList<String>) i.readObject();
             i.close();
         } catch (Exception e){
@@ -148,6 +160,11 @@ class Graphing {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Kruskal's algorithm to find a MST
+     * @return weight of MST
+     */
 
     double kruskal(){
         Queue<Page> notVisited = new PriorityQueue<>(pages.size(), Comparator.comparingDouble(o -> o.distance));
@@ -244,13 +261,20 @@ class Graphing {
         return pather;
     }
 
+    /**
+     *
+     * @param src source pages
+     * @param destination destination page
+     * @return array of source and destination most similar pages
+     */
+
     String[] getMostSimilar(String src, String destination){
         String[] sims = {src, destination};
         String[] ans = new String[2];
         for(int i = 0; i < 2; i++) {
             double similar = 0.0;
-            for (WikiPage dest : fu.values()) {
-                double compared = co.compare(fu.get(sims[i]), dest);
+            for (WikiPage dest : wikiPages.values()) {
+                double compared = comparer.compare(wikiPages.get(sims[i]), dest);
                 if (compared > similar && !src.equals(dest.getTitle())) {
                     similar = compared;
                     ans[i] = dest.getTitle();
